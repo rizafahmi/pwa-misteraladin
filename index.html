@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="x-ua-compatible" content="ie-edge">
+    <meta name="description" content="Best video resources for learn programming">
+    <link rel="stylesheet" href="styles/main.css" type="text/css" media="screen" charset="utf-8">
+    <link rel="stylesheet" href="styles/spinner.css" type="text/css" media="screen" charset="utf-8">
+    <title>Engieers.id</title>
+  </head>
+  <body>
+    <nav>
+      <div class="left">
+        <a href="/">
+          <h1>Engineers.id</h1>
+        </a>
+      </div>
+      <div class="right">
+        <button onclick="location.reload()" class="btn card__btn">Refresh</button>
+      </div>
+    </nav>
+    <div class="spinner">
+      <div class="rect1"></div>
+      <div class="rect2"></div>
+      <div class="rect3"></div>
+      <div class="rect4"></div>
+      <div class="rect5"></div>
+    </div>
+    <ul class="cards">
+    </ul>
+
+    <script id="card" type="text/template">
+      <li class="cards__item">
+        <div class="card">
+          <div class="card__image" style="background-image: url('{{image}}')"></div>
+          <div class="card__content">
+            <div class="card__title">{{title}}</div>
+            <p class="card__text">{{description}}</p>
+            <button class="btn btn--block card__btn">View</button>
+          </div>
+        </div>
+      </li>
+    </script>
+    <script src="scripts/app.js"></script>
+
+  </body>
+</html>
