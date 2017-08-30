@@ -24,6 +24,17 @@ const appendData = videos => {
 
 const url = 'https://engineers-id-backend-ybbwzovhnl.now.sh/api/videos'
 
-fetch(url).then(response => response.json()).then(json => {
-  appendData(json)
-})
+fetch(url)
+  .then(response => response.json())
+  .then(json => {
+    appendData(json)
+  })
+  .catch(err => {
+    console.log(err)
+  })
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./service-worker.js').then(() => {
+    console.log('[App] Service Worker Registered')
+  })
+}
