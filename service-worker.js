@@ -1,6 +1,7 @@
 /* global self, caches, fetch */
 
-const cacheName = 'misterpwa'
+const appCacheName = 'misterpwa'
+const dataCacheName = 'misterpwa-data'
 const filesToCache = [
   '/',
   '/index.html',
@@ -13,7 +14,7 @@ const filesToCache = [
 self.addEventListener('install', e => {
   console.log('[ServiceWorker] Install')
   e.waitUntil(
-    caches.open(cacheName).then(cache => {
+    caches.open(appCacheName).then(cache => {
       console.log('[ServiceWorker] Caching the app shell')
       return cache.addAll(filesToCache)
     })
@@ -26,7 +27,7 @@ self.addEventListener('activate', e => {
     caches.keys().then(keyList => {
       return Promise.all(
         keyList.map(key => {
-          if (key !== cacheName) {
+          if (key !== appCacheName && key !== dataCacheName) {
             console.log('[ServiceWorker] Removing old cache', key)
             return caches.delete(key)
           }
@@ -38,7 +39,26 @@ self.addEventListener('activate', e => {
 })
 
 self.addEventListener('fetch', e => {
-  e.respondWith(
-    caches.match(e.request).then(response => response || fetch(e.request))
-  )
+  console.log('[ServiceWorker] Fetching... ', e.request.url)
+  const url = 'https://engineers-id-backend-ybbwzovhnl.now.sh/api/videos'
+  if (e.request.url.indexOf(url) > -1) {
+    e.respondWith(
+      caches.open(dataCacheName).then(cache => {
+        return fetch(e.request, { mode: 'cors' })
+          .then(networkResponse => {
+            cache.put(e.request, networkResponse.clone())
+            return networkResponse
+          })
+          .catch(() => {
+            return caches.match(e.request)
+          })
+      })
+    )
+  } else {
+    e.respondWith(
+      caches.match(e.request).then(response => {
+        return response || fetch(e.request)
+      })
+    )
+  }
 })
